@@ -1,0 +1,381 @@
+
+
+###########
+100 Trying
+Via =  SIP/2.0/UDP 192.168.0.335060;branch=z9hG4bK971338874;received=211.52.153.234;rport=5060
+From = 362
+To = 362
+Call-ID =  f65fd3b80f38767879e54bd213a521ce
+CSeq =  25095 REGISTER
+User-Agent =  25095 REGISTER
+Allow =  INVITE, ACK, CANCEL, OPTIONS, BYE, REFER, SUBSCRIBE, NOTIFY
+Contact =  <sip362@58.75.88.134>
+Content-Length =  0
+
+
+###########
+401 Unauthorized
+Via =  SIP/2.0/UDP 192.168.0.335060;branch=z9hG4bK971338874;received=211.52.153.234;rport=5060
+From = 362
+To = 362
+Call-ID =  f65fd3b80f38767879e54bd213a521ce
+CSeq =  25095 REGISTER
+User-Agent =  25095 REGISTER
+Allow =  INVITE, ACK, CANCEL, OPTIONS, BYE, REFER, SUBSCRIBE, NOTIFY
+WWW-Authenticate =  Digest algorithm=MD5, realm="asterisk", nonce="4499277b"
+Content-Length =  0
+
+
+###########
+
+
+###########
+100 Trying
+Via =  SIP/2.0/UDP 192.168.0.335060;branch=z9hG4bKbfabed6b6;received=211.52.153.234;rport=5060
+From = 362
+To = 362
+Call-ID =  f65fd3b80f38767879e54bd213a521ce
+CSeq =  25096 REGISTER
+User-Agent =  25096 REGISTER
+Allow =  INVITE, ACK, CANCEL, OPTIONS, BYE, REFER, SUBSCRIBE, NOTIFY
+Contact =  <sip362@58.75.88.134>
+Content-Length =  0
+
+
+###########
+200 OK
+Via =  SIP/2.0/UDP 192.168.0.335060;branch=z9hG4bKbfabed6b6;received=211.52.153.234;rport=5060
+From = 362
+To = 362
+Call-ID =  f65fd3b80f38767879e54bd213a521ce
+CSeq =  25096 REGISTER
+User-Agent =  25096 REGISTER
+Allow =  INVITE, ACK, CANCEL, OPTIONS, BYE, REFER, SUBSCRIBE, NOTIFY
+Expires =  45
+Contact =  <sip362@192.168.0.335060;transport=udp;rport=5060>;expires=45
+Date =  Mon, 08 Aug 2011 025246 GMT
+Content-Length =  0
+
+
+###########
+
+
+###########
+100 Trying
+Via =  SIP/2.0/UDP 192.168.0.335060;branch=z9hG4bK621733e3d;received=211.52.153.234;rport=5060
+From = 362
+To = 362
+Call-ID =  f65fd3b80f38767879e54bd213a521ce
+CSeq =  25115 REGISTER
+User-Agent =  25115 REGISTER
+Allow =  INVITE, ACK, CANCEL, OPTIONS, BYE, REFER, SUBSCRIBE, NOTIFY
+Contact =  <sip362@58.75.88.134>
+Content-Length =  0
+
+
+###########
+401 Unauthorized
+Via =  SIP/2.0/UDP 192.168.0.335060;branch=z9hG4bK621733e3d;received=211.52.153.234;rport=5060
+From = 362
+To = 362
+Call-ID =  f65fd3b80f38767879e54bd213a521ce
+CSeq =  25115 REGISTER
+User-Agent =  25115 REGISTER
+Allow =  INVITE, ACK, CANCEL, OPTIONS, BYE, REFER, SUBSCRIBE, NOTIFY
+WWW-Authenticate =  Digest algorithm=MD5, realm="asterisk", nonce="3e728489"
+Content-Length =  0
+
+
+###########
+
+
+###########
+100 Trying
+Via =  SIP/2.0/UDP 192.168.0.335060;branch=z9hG4bKfa29bffd6;received=211.52.153.234;rport=5060
+From = 362
+To = 362
+Call-ID =  f65fd3b80f38767879e54bd213a521ce
+CSeq =  25116 REGISTER
+User-Agent =  25116 REGISTER
+Allow =  INVITE, ACK, CANCEL, OPTIONS, BYE, REFER, SUBSCRIBE, NOTIFY
+Contact =  <sip362@58.75.88.134>
+Content-Length =  0
+
+
+###########
+200 OK
+Via =  SIP/2.0/UDP 192.168.0.335060;branch=z9hG4bKfa29bffd6;received=211.52.153.234;rport=5060
+From = 362
+To = 362
+Call-ID =  f65fd3b80f38767879e54bd213a521ce
+CSeq =  25116 REGISTER
+User-Agent =  25116 REGISTER
+Allow =  INVITE, ACK, CANCEL, OPTIONS, BYE, REFER, SUBSCRIBE, NOTIFY
+Expires =  45
+Contact =  <sip362@192.168.0.335060;transport=udp;rport=5060>;expires=45
+Date =  Mon, 08 Aug 2011 025636 GMT
+Content-Length =  0
+
+
+###########
+
+
+###########
+100 Trying
+Via =  SIP/2.0/UDP 192.168.0.335060;branch=z9hG4bK5ee480a62;received=211.52.153.234;rport=5060
+From = 362
+To = 362
+Call-ID =  f65fd3b80f38767879e54bd213a521ce
+CSeq =  25117 REGISTER
+User-Agent =  25117 REGISTER
+Allow =  INVITE, ACK, CANCEL, OPTIONS, BYE, REFER, SUBSCRIBE, NOTIFY
+Contact =  <sip362@58.75.88.134>
+Content-Length =  0
+
+
+###########
+401 Unauthorized
+Via =  SIP/2.0/UDP 192.168.0.335060;branch=z9hG4bK5ee480a62;received=211.52.153.234;rport=5060
+From = 362
+To = 362
+Call-ID =  f65fd3b80f38767879e54bd213a521ce
+CSeq =  25117 REGISTER
+User-Agent =  25117 REGISTER
+Allow =  INVITE, ACK, CANCEL, OPTIONS, BYE, REFER, SUBSCRIBE, NOTIFY
+WWW-Authenticate =  Digest algorithm=MD5, realm="asterisk", nonce="755fcd52"
+Content-Length =  0
+
+
+###########
+
+
+###########
+100 Trying
+Via =  SIP/2.0/UDP 192.168.0.335060;branch=z9hG4bK25c0797e7;received=211.52.153.234;rport=5060
+From = 362
+To = 362
+Call-ID =  f65fd3b80f38767879e54bd213a521ce
+CSeq =  25118 REGISTER
+User-Agent =  25118 REGISTER
+Allow =  INVITE, ACK, CANCEL, OPTIONS, BYE, REFER, SUBSCRIBE, NOTIFY
+Contact =  <sip362@58.75.88.134>
+Content-Length =  0
+
+
+###########
+200 OK
+Via =  SIP/2.0/UDP 192.168.0.335060;branch=z9hG4bK25c0797e7;received=211.52.153.234;rport=5060
+From = 362
+To = 362
+Call-ID =  f65fd3b80f38767879e54bd213a521ce
+CSeq =  25118 REGISTER
+User-Agent =  25118 REGISTER
+Allow =  INVITE, ACK, CANCEL, OPTIONS, BYE, REFER, SUBSCRIBE, NOTIFY
+Expires =  45
+Contact =  <sip362@192.168.0.335060;transport=udp;rport=5060>;expires=45
+Date =  Mon, 08 Aug 2011 025659 GMT
+Content-Length =  0
+
+
+###########
+Via =  SIP/2.0/UDP 58.75.88.1345060;branch=z9hG4bK4e8f158c;rport
+From = 01033786876
+To = 362
+Contact =  <sip01033786876@58.75.88.134>
+Call-ID =  173afd6d157758e93e3a41c178e2747d
+CSeq =  102 INVITE
+User-Agent =  102 INVITE
+Max-Forwards =  70
+Date =  Mon, 08 Aug 2011 025704 GMT
+Allow =  INVITE, ACK, CANCEL, OPTIONS, BYE, REFER, SUBSCRIBE, NOTIFY
+Content-Type =  application/sdp
+Content-Length =  214
+v = 0
+o = root 2788 2788 IN IP4 58.75.88.134
+s = session
+c = IN IP4 58.75.88.134
+t = 0 0
+m = audio 12694 RTP/AVP 8 101
+a=rtpmap = 8 PCMA/8000
+a=rtpmap = 101 telephone-event/8000
+a=fmtp = 101 0-16
+a=silenceSupp = off - - - -
+
+
+###########
+100 Trying
+Call-ID =  173afd6d157758e93e3a41c178e2747d
+CSeq =  102 INVITE
+From = 01033786876
+To = 362
+Via =  SIP/2.0/UDP 58.75.88.1345060;branch=z9hG4bK4e8f158c
+Content-Length =  0
+User-Agent =  102 INVITE
+
+
+###########
+180 Ringing
+Call-ID =  173afd6d157758e93e3a41c178e2747d
+CSeq =  102 INVITE
+From = 01033786876
+To = 362
+Via =  SIP/2.0/UDP 58.75.88.1345060;branch=z9hG4bK4e8f158c
+Content-Length =  0
+Contact =  <sip362@192.168.0.335060;transport=udp>
+User-Agent =  102 INVITE
+
+
+###########
+OPTIONS sip = 362@192.168.0.335060;transport=udp;rport=5060 SIP/2.0
+Via =  SIP/2.0/UDP 58.75.88.1345060;branch=z9hG4bK6fb03a2b;rport
+From = unknown
+To = 362
+Contact =  <sipunknown@58.75.88.134>
+Call-ID =  2d582fe32707a86e486325fb32810ee4
+CSeq =  102 OPTIONS
+User-Agent =  102 OPTIONS
+Max-Forwards =  70
+Date =  Mon, 08 Aug 2011 025704 GMT
+Allow =  INVITE, ACK, CANCEL, OPTIONS, BYE, REFER, SUBSCRIBE, NOTIFY
+Content-Length =  0
+
+
+###########
+200 OK
+Call-ID =  2d582fe32707a86e486325fb32810ee4
+CSeq =  102 OPTIONS
+From = unknown
+To = 362
+Via =  SIP/2.0/UDP 58.75.88.1345060;branch=z9hG4bK6fb03a2b
+Content-Length =  0
+Accept =  application/sdp
+Accept-Encoding =  gzip
+Accept-Language =  en
+Supported =  100rel,replaces
+User-Agent =  102 OPTIONS
+
+
+###########
+200 OK
+Call-ID =  173afd6d157758e93e3a41c178e2747d
+CSeq =  102 INVITE
+From = 01033786876
+To = 362
+Via =  SIP/2.0/UDP 58.75.88.1345060;branch=z9hG4bK4e8f158c
+Content-Length =  196
+Supported =  timer,replaces
+Content-Type =  application/sdp
+Contact =  <sip362@192.168.0.335060;transport=udp>
+User-Agent =  102 INVITE
+v = 0
+o = 362 1654592665 78456232 IN IP4 192.168.0.33
+s = SIP Call
+c = IN IP4 192.168.0.33
+t = 0 0
+m = audio 3000 RTP/AVP 8 101
+a=rtpmap = 8 PCMA/8000
+a=rtpmap = 101 telephone-event/8000
+a=fmtp = 101 0-15
+
+
+###########
+ACK sip = 362@192.168.0.335060;transport=udp SIP/2.0
+Via =  SIP/2.0/UDP 58.75.88.1345060;branch=z9hG4bK2594d25d;rport
+From = 01033786876
+To = 362
+Contact =  <sip01033786876@58.75.88.134>
+Call-ID =  173afd6d157758e93e3a41c178e2747d
+CSeq =  102 ACK
+User-Agent =  102 ACK
+Max-Forwards =  70
+Content-Length =  0
+
+
+###########
+BYE sip = 01033786876@58.75.88.134 SIP/2.0
+Max-Forwards =  70
+Content-Length =  0
+Via =  SIP/2.0/UDP 192.168.0.335060;branch=z9hG4bK37e7f3549;rport
+Call-ID =  173afd6d157758e93e3a41c178e2747d
+From = 362
+To = 01033786876
+CSeq =  375028726 BYE
+Supported =  timer,replaces
+User-Agent =  375028726 BYE
+
+
+###########
+200 OK
+Via =  SIP/2.0/UDP 192.168.0.335060;branch=z9hG4bK37e7f3549;received=211.52.153.234;rport=5060
+From = 362
+To = 01033786876
+Call-ID =  173afd6d157758e93e3a41c178e2747d
+CSeq =  375028726 BYE
+User-Agent =  375028726 BYE
+Allow =  INVITE, ACK, CANCEL, OPTIONS, BYE, REFER, SUBSCRIBE, NOTIFY
+Contact =  <sip01033786876@58.75.88.134>
+Content-Length =  0
+X-Asterisk-HangupCause =  Normal Clearing
+
+
+###########
+
+
+###########
+100 Trying
+Via =  SIP/2.0/UDP 192.168.0.335060;branch=z9hG4bK28c855018;received=211.52.153.234;rport=5060
+From = 362
+To = 362
+Call-ID =  f65fd3b80f38767879e54bd213a521ce
+CSeq =  25119 REGISTER
+User-Agent =  25119 REGISTER
+Allow =  INVITE, ACK, CANCEL, OPTIONS, BYE, REFER, SUBSCRIBE, NOTIFY
+Contact =  <sip362@58.75.88.134>
+Content-Length =  0
+
+
+###########
+401 Unauthorized
+Via =  SIP/2.0/UDP 192.168.0.335060;branch=z9hG4bK28c855018;received=211.52.153.234;rport=5060
+From = 362
+To = 362
+Call-ID =  f65fd3b80f38767879e54bd213a521ce
+CSeq =  25119 REGISTER
+User-Agent =  25119 REGISTER
+Allow =  INVITE, ACK, CANCEL, OPTIONS, BYE, REFER, SUBSCRIBE, NOTIFY
+WWW-Authenticate =  Digest algorithm=MD5, realm="asterisk", nonce="6119b62c"
+Content-Length =  0
+
+
+###########
+
+
+###########
+100 Trying
+Via =  SIP/2.0/UDP 192.168.0.335060;branch=z9hG4bK66af5777a;received=211.52.153.234;rport=5060
+From = 362
+To = 362
+Call-ID =  f65fd3b80f38767879e54bd213a521ce
+CSeq =  25120 REGISTER
+User-Agent =  25120 REGISTER
+Allow =  INVITE, ACK, CANCEL, OPTIONS, BYE, REFER, SUBSCRIBE, NOTIFY
+Contact =  <sip362@58.75.88.134>
+Content-Length =  0
+
+
+###########
+200 OK
+Via =  SIP/2.0/UDP 192.168.0.335060;branch=z9hG4bK66af5777a;received=211.52.153.234;rport=5060
+From = 362
+To = 362
+Call-ID =  f65fd3b80f38767879e54bd213a521ce
+CSeq =  25120 REGISTER
+User-Agent =  25120 REGISTER
+Allow =  INVITE, ACK, CANCEL, OPTIONS, BYE, REFER, SUBSCRIBE, NOTIFY
+Expires =  45
+Contact =  <sip362@192.168.0.335060;transport=udp;rport=5060>;expires=45
+Date =  Mon, 08 Aug 2011 025722 GMT
+Content-Length =  0
+
+
+###########
