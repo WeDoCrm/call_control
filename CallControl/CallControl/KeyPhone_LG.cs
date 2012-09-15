@@ -10,7 +10,7 @@ namespace CallControl
     {
         public delegate void KeyPhone_LG_MessageDelegate(string sEvent, string sInfo);
         public event KeyPhone_LG_MessageDelegate OnEvent;
-
+        StreamWriter sw;
         private SerialPort comport = new SerialPort();
 
         public string Connect(string COM_Name)
@@ -89,6 +89,8 @@ namespace CallControl
             // Display the text to the user in the terminal
             //MessageBox.Show(data);
             Process_code(data);
+
+            log(data);
         }
 
         protected void Process_code(string data)
@@ -163,6 +165,19 @@ namespace CallControl
             }
         }
 
-        
+        private void log(string log)
+        {
+            try
+            {
+                sw = new StreamWriter("CallControl.log", true);
+                sw.WriteLine(log);
+                sw.Flush();
+                sw.Close();
+            }
+            catch (Exception ex)
+            {
+                
+            }
+        }
     }
 }
