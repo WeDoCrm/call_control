@@ -9,7 +9,6 @@ using SharpPcap;
 using System.Net;
 using System.Net.Sockets;
 using System.Threading;
-using System.Windows.Forms;
 
 namespace CallControl
 {
@@ -24,7 +23,6 @@ namespace CallControl
         //PopForm popform = null;
         //InfoForm infoform = null;
         //SetNICForm nicform = null;
-        StreamWriter sw;
         delegate void stringDele(string log);
         delegate void RingingDele(string cname, string ani);
         delegate void AbandonDele();
@@ -52,8 +50,7 @@ namespace CallControl
                 {
                     dev.OnPacketArrival += new PacketArrivalEventHandler(device_OnPacketArrival);
                     dev.Open(DeviceMode.Promiscuous, 500);
-                    dev.Filter = "udp port 5060";
-                    dev.OnCaptureStopped += new CaptureStoppedEventHandler(dev_OnCaptureStopped);
+                    dev.Filter = "udp src port 5060";
 
                     try
                     {
@@ -84,18 +81,6 @@ namespace CallControl
             return result;
         }
 
-        private void dev_OnCaptureStopped(object sender, CaptureStoppedEventStatus status)
-        {
-            try
-            {
-                logWriter("Capture Stopped  Cause : " + status.ToString());
-            }
-            catch (Exception ex)
-            {
-                logWriter(ex.ToString());
-            }
-        }
-
         public string disConnect()
         {
             string result = "Success";
@@ -118,80 +103,56 @@ namespace CallControl
         /// <param name="e"></param>
         private void device_OnPacketArrival(object sender, CaptureEventArgs e)
         {
-            logWriter("Packet 수신!");
+            //log("Packet 수신!");
             Packet p = Packet.ParsePacket(e.Packet.LinkLayerType, e.Packet.Data);
             UdpPacket udpPacket = UdpPacket.GetEncapsulated(p);
             string data = Encoding.ASCII.GetString(udpPacket.PayloadData);
             SIPM = makeSIPConstructor(data);
 
-            //logWriter("raw packet : " + data);
+            //log(data);
 
             if (SIPM.method.Equals("INVITE"))
             {
                 if (SIPM.sName.Equals("session")) //Ringing
                 {
                     OnEvent("Ringing", SIPM.from + "|" + SIPM.to + "|" + SIPM.callid);
+                    
+                }
+                else if (SIPM.sName.Equals("SIP Call")) //Dial
+                {
+                    OnEvent("Dialing", SIPM.from + "|" + SIPM.to + "|" + SIPM.callid);
+                    
                 }
             }
-            else if (SIPM.code.Equals("180"))
+            else if (SIPM.code.Equals("200")) //Answer
             {
-                if (SIPM.cseq.Contains("102") && SIPM.cseq.Contains("INVITE")) //Ringing
+                if (SIPM.sName.Equals("SIP Call"))
                 {
-                    OnEvent("Ringing", SIPM.from + "|" + SIPM.to + "|" + SIPM.callid);
-                }
-                else if (SIPM.method.Equals("Ringing"))
-                {
-                    OnEvent("Ringing", SIPM.from + "|" + SIPM.to + "|" + SIPM.callid);
-                }
+                    OnEvent("Answer", SIPM.from + "|" + SIPM.to + "|" + SIPM.callid);
 
-            }
-            else if (SIPM.code.Equals("200")) 
-            {
-                if (SIPM.cseq.Contains("BYE")) //통화완료
-                {
-                    OnEvent("HangUp", SIPM.from + "|" + SIPM.to + "|" + SIPM.callid);
                 }
+                else if (SIPM.sName.Equals("session")) //발신 후 연결 
+                {
+                    OnEvent("CallConnect", SIPM.from + "|" + SIPM.to + "|" + SIPM.callid);
 
+                }
             }
             else if (SIPM.method.Equals("CANCEL")) //Abandon
             {
                 OnEvent("Abandon", SIPM.from + "|" + SIPM.to + "|" + SIPM.callid);
                 
             }
-            else if (SIPM.method.Equals("BYE")) //Release
+            else if (SIPM.method.Equals("BYE")) //Abandon
             {
                 OnEvent("HangUp", SIPM.from + "|" + SIPM.to + "|" + SIPM.callid);
             
             }
-            
-            else if (SIPM.code.Equals("183")) 
-            {
-                if (SIPM.sName.Equals("session")) //Dialing
-                {
-                    OnEvent("Dialing", SIPM.from + "|" + SIPM.to + "|" + SIPM.callid);
-                }
-            }
-            else if (SIPM.cseq.Contains("ACK"))
-            {
-                if (!SIPM.from.Equals(SIPM.to)) //Answer
-                {
-                    OnEvent("Answer", SIPM.from + "|" + SIPM.to + "|" + SIPM.callid);
-                }
-            }
-            else
-            {
-                if (!SIPM.from.Equals(SIPM.to) && SIPM.sName.Equals("session"))
-                {
-                    OnEvent("Ringing", SIPM.from + "|" + SIPM.to + "|" + SIPM.callid);
-                }
-            }
-           
         }
 
         private SIPMessage makeSIPConstructor(string data)
         {
             SIPM = new SIPMessage();
-            
+            StreamWriter sw = new StreamWriter("PacketDump_" + DateTime.Now.ToShortDateString() + ".txt", true, Encoding.Default);
             try
             {
                 string code = "Unknown";
@@ -231,28 +192,20 @@ namespace CallControl
                             {
                                 code = sipArr[1].Trim();
                                 method = sipArr[2].Trim();
-                                logWriter(code + " " + method);
+                                sw.WriteLine(code + " " + method);
                             }
                         }
                         else if (Gubun.Equals("INV")) //Request Line
                         {
                             method = "INVITE";
-                            logWriter("method = " + method);
                         }
                         else if (Gubun.Equals("CAN"))
                         {
                             method = "CANCEL";
-                            logWriter("method = " + method);
                         }
                         else if (Gubun.Equals("BYE"))
                         {
                             method = "BYE";
-                            logWriter("method = " + method);
-                        }
-                        else if (Gubun.Equals("ACK"))
-                        {
-                            method = "ACK";
-                            logWriter("method = " + method);
                         }
                         else
                         {
@@ -262,7 +215,7 @@ namespace CallControl
                                 sipArr = line.Split('=');
                                 if (sipArr.Length > 1)
                                 {
-                                    logWriter(sipArr[0] + " = " + sipArr[1]);
+                                    sw.WriteLine(sipArr[0] + " = " + sipArr[1]);
                                     if (sipArr[0].Equals("s")) sName = sipArr[1];
                                 }
                             }
@@ -274,27 +227,27 @@ namespace CallControl
                                 {
                                     case "From":
                                         from = sipArr[2].Split('@')[0];
-                                        logWriter("From = " + from);
+                                        sw.WriteLine("From = " + from);
                                         break;
 
                                     case "To":
                                         to = sipArr[2].Split('@')[0];
-                                        logWriter("To = " + to);
+                                        sw.WriteLine("To = " + to);
                                         break;
 
                                     case "Call-ID":
                                         callid = sipArr[1].Split('@')[0];
-                                        logWriter("Call-ID = " + callid);
+                                        sw.WriteLine("Call-ID = " + callid);
                                         break;
 
                                     case "CSeq":
                                         cseq = sipArr[1].Split('@')[0];
-                                        logWriter("CSeq = " + cseq);
+                                        sw.WriteLine("CSeq = " + cseq);
                                         break;
 
                                     case "User-Agent":
                                         agent = sipArr[1].Split('@')[0];
-                                        logWriter("User-Agent = " + cseq);
+                                        sw.WriteLine("User-Agent = " + cseq);
                                         break;
 
                                     default:
@@ -304,7 +257,7 @@ namespace CallControl
                                         {
                                             value += sipArr[i];
                                         }
-                                        logWriter(key + " = " + value);
+                                        sw.WriteLine(key + " = " + value);
 
                                         break;
                                 }
@@ -312,30 +265,20 @@ namespace CallControl
                         }
                     }
                 }
-                if (!from.Equals(to))
-                {
-                    logWriter("raw packet : " + data);
-                }
-               
+                sw.WriteLine("\r\n");
+                sw.WriteLine("###########");
+                sw.Flush();
+                sw.Close();
                 SIPM.setSIPMessage(code, method, callid, cseq, from, to, agent, sName);
 
             }
             catch (Exception ex)
             {
-                logWriter(ex.ToString());
-                
+                //log(ex.ToString());
+                sw.Close();
             }
 
             return SIPM;
-        }
-
-        private void logWriter(string log)
-        {
-            sw = new StreamWriter("PacketDump_" + DateTime.Now.ToShortDateString() + ".txt", true, Encoding.Default);
-            sw.WriteLine("\r\n");
-            sw.WriteLine(log + "  (" + DateTime.Now.ToShortTimeString() + ")");
-            sw.Flush();
-            sw.Close();
         }
     }
 }

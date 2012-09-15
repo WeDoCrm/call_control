@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Text;
-using System.Windows.Forms;
 
 namespace CallControl
 {
@@ -14,6 +13,15 @@ namespace CallControl
 
         public delegate void CommCtl_MessageDelegate(string sEvent, string sInfo);  //Client에 정보 전달을 위한 Delegate
         public event CommCtl_MessageDelegate OnEvent;
+
+        //public enum COMM_TYPE : string {
+        //LG_KeyPhone = "LG",
+        //SS_KeyPhone = "SS",
+        //    SIP_Phone = "SIP",
+        //    CIP_1Port = "CI1",
+        //    CID_2Port = "CI2"
+        //}
+
 
         private string keys = "";
         /**
@@ -38,9 +46,9 @@ namespace CallControl
                 commType_SIP = new SIPPhone();
                 commType_SIP.OnEvent += new SIPPhone.SIPPhone_MessageDelegate(RecvMessage);
             }
-            if (keys.Equals("CID"))
+            if (keys.Equals("CI1") || keys.Equals("CI2"))
             {
-                commType_CID = new CIDBox();
+                commType_CID = new CIDBox(keys);
                 commType_CID.OnEvent += new CIDBox.CIDBox_MessageDelegate(RecvMessage);
             }
         }
@@ -66,7 +74,7 @@ namespace CallControl
             {
                 result = commType_SIP.Connect(arg);
             }
-            if (keys.Equals("CID"))
+            if (keys.Equals("CI1")||keys.Equals("CI2"))
             {
                 result = commType_CID.Connect(arg);
             }
@@ -92,7 +100,7 @@ namespace CallControl
             {
                 result = commType_SIP.disConnect();
             }
-            if (keys.Equals("CID"))
+            if (keys.Equals("CI1") || keys.Equals("CI2"))
             {
                 result = commType_CID.disConnect();
             }
@@ -113,15 +121,10 @@ namespace CallControl
          */
         public void Dial(string sBuf)
         {
-            if (keys.Equals("CID"))
+            if (keys.Equals("CI1") || keys.Equals("CI2"))
             {
                 commType_CID.MakeOpcode("1", "O", sBuf);
             }
-        }
-
-        private void logWriter(string log)
-        {
-            
         }
     }
 }

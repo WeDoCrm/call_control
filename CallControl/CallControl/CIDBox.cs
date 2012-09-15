@@ -4,8 +4,7 @@ using System.Text;
 using System.IO;
 using System.IO.Ports;
 using System.Collections;
-using System.Windows.Forms;
-
+using System.Threading;
 
 namespace CallControl
 {
@@ -13,15 +12,29 @@ namespace CallControl
     {
         public delegate void CIDBox_MessageDelegate(string sEvent, string sInfo);
         public event CIDBox_MessageDelegate OnEvent;
-        delegate void LogDele(string log);
-        StreamWriter sw;
-        //DirectoryInfo di;
-        bool CanFileWrite = false;
-        string data = null;
+
         private SerialPort comport = new SerialPort();
+        private bool hasHookOffMsg = false;
+        public CIDBox(string key)
+        {
+            logFileWrite("CIDBox key=" + key);
+
+            if (key.Equals("CI1"))
+            {
+                hasHookOffMsg = true;
+            }
+            else
+            {
+                hasHookOffMsg = false;
+            }
+
+        }
 
         public string Connect(string COM_Name)
         {
+            logFileWrite("Connect hasHookOffMsg=" + hasHookOffMsg + " COM_Name=" + COM_Name);
+
+
             string result = "";
             comport.DataReceived += new SerialDataReceivedEventHandler(port_DataReceived);
             bool error = false;
@@ -35,7 +48,6 @@ namespace CallControl
             comport.StopBits = (StopBits)Enum.Parse(typeof(StopBits), "1");
             comport.Parity = (Parity)Enum.Parse(typeof(Parity), "None");
             comport.PortName = COM_Name;
-
             try
             {
                 // Open the port
@@ -81,6 +93,15 @@ namespace CallControl
             return result;
         }
 
+        string mData = "";
+        byte[] mBuffer = new byte[1024];
+        bool isFullMsg = false;
+        bool isMsgStarted = false;
+        const byte BYTE_CID_START = 0x02;  //""
+        const byte BYTE_CID_END = 0x03;    //""
+        const string DUMMY_CID_HOOKOFF = "1S";
+        const string DUMMY_CID_HOOKON = "1E";
+        
         private void port_DataReceived(object sender, SerialDataReceivedEventArgs e)
         {
             // If the com port has been closed, do nothing
@@ -89,34 +110,73 @@ namespace CallControl
             // This method will be called when there is data waiting in the port's buffer
 
             // Read all the data waiting in the buffer
-            //while(comport.
-            
+            //string data = comport.ReadExisting();
+            int byteLen = comport.BytesToRead;
+            int read = 0;
+            int offset = 0;
+            byte buff = 0x00;
+            //logFileWrite("byteLen=" + byteLen);
             while (true)
             {
-                string temp = comport.ReadExisting();
-                if (temp.Length > 0)
+                buff = (byte)comport.ReadByte();
+                //logFileWrite("read=" + read);
+                //logFileWrite("buff=" + buff);
+                if (buff == BYTE_CID_START) isMsgStarted = true;
+
+                if (buff == BYTE_CID_START
+                    || (buff == BYTE_CID_END && read == (byteLen - 1))
+                    || (buff <= 0x7A && buff >= 0x30))
                 {
-                    data += temp;
+                    mBuffer[offset] = buff;
+                    offset++;
+                    buff = 0x00;
+                } else {
+                    if (isMsgStarted)  //means got all message needed. not between 'z' ~ '0'
+                    {
+                        isFullMsg = true;
+                        //logFileWrite("tread=" + read);
+                        //logFileWrite("tmBuffer[read]=" + buff);
+                        break;
+                    }
                 }
-                else
+                read++;
+                if (read >= byteLen)
                 {
+                    if (!isMsgStarted) isFullMsg = true;
                     break;
                 }
             }
-            //comport.Read(
-            //logWrite(Encoding.
-            // Display the text to the user in the terminal
-            //MessageBox.Show(data);
-            Process_code(data);
-            logWrite(data);
-            
+
+            //if (offset == 1 && mBuffer[0] == BYTE_CID_END)
+            //{
+            //    mData = DUMMY_CID_HOOKOFF;
+            //}
+            //else
+            //{
+            //    mData += System.Text.Encoding.Default.GetString(mBuffer, 0, offset);
+            //}
+            mData += System.Text.Encoding.Default.GetString(mBuffer, 0, offset);
+            //memset
+            for (int i = 0; i < mBuffer.Length; i++)
+                mBuffer[i] = 0x00;
+
+            if (isFullMsg)
+            {
+                // Display the text to the user in the terminal
+                //MessageBox.Show(data);
+                Process_code(mData);
+                isFullMsg = false;
+                isMsgStarted = false;
+                mData = "";
+            }
         }
 
         protected void Process_code(string data)
         {
             string rtnval = "";
 
-            if (data.Length > 3)
+            logFileWrite(":"+data+":");
+            if (data.Length >= 3)
             {
                 string Opcode = data.Substring(2, 1);
                 switch (Opcode)
@@ -138,28 +198,37 @@ namespace CallControl
                         else if (rtnval.Equals("0"))    //숫자 0
                         {
                             rtnval = data.Replace(" ", "");
-                            rtnval = rtnval.Substring(3, rtnval.Length - 4);
+                            rtnval = rtnval.Substring(3, rtnval.Length - 3);
                         }
                         else
                         {
                             rtnval = "";
                         }
+                        logFileWrite("Ringing::" + rtnval + "\n");
                         OnEvent("Ringing", rtnval);
+                        //2포트의 경우 'S','E'시그널이 없으므로 강제로 OffHook만 발생시킴
+                        //CRM에서 자동으로 팝업뜨게 됨
+                        if (!hasHookOffMsg)
+                        {
+                            Thread.Sleep(1000);
+                            logFileWrite("Auto OffHook ==> 2 port \n");
+                            OnEvent("OffHook", "");
+                        }
                         break;
                     case "P":
                         break;
-                    
+                    case "K":
+                        OnEvent("Dialing", "");
+                        break;
                     case "S":
                         OnEvent("OffHook", "");
                         break;
-                    
                     case "E":
                         OnEvent("OnHook", "");
                         break;
                 }
             }
         }
-
         public void MakeOpcode(string sPort, string sCode, string sValue)
         {
             string trBuffer = "";
@@ -181,44 +250,6 @@ namespace CallControl
             */
         }
 
-        /// <summary>
-        /// 서버 로그창에 로그 쓰기 및 로그파일에 쓰기
-        /// </summary>
-        /// <param name="svrLog"></param>
-        public void logWrite(string Log)
-        {
-            try
-            {
-                Log += "( " + DateTime.Now.ToString() + ")" + "\r\n";
-                //if (CanFileWrite == true)
-                logFileWrite(Log);
-            }
-            catch (Exception exception)
-            {
-                logWrite(exception.ToString());
-            }
-        }
-
-        /// <summary>
-        /// 서버 관련 파일 폴더 생성
-        /// </summary>
-        public void FolderCheck()
-        {
-            try
-            {
-                //if (!di.Exists)
-                //{
-                //    di.Create();
-                //    logWrite(" 폴더 생성!");
-                //}
-            }
-            catch (Exception e)
-            {
-                logWrite(e.ToString() + " : 폴더를 생성하지 못했습니다.");
-            }
-            CanFileWrite = true;
-        }
-
 
         /// <summary>
         /// 로그파일 생성 및 쓰기
@@ -228,25 +259,28 @@ namespace CallControl
         {
             try
             {
+                //di = new DirectoryInfo(Application.StartupPath + "\\log\\" + DateTime.Now.ToShortDateString() + ".log");
+
                 //if (!di.Exists)
                 //{
-                //    FolderCheck();
+                //    svr_FileCheck();
                 //}
+
                 try
                 {
-                    sw = new StreamWriter(Application.StartupPath + "\\CallControlDump_" + DateTime.Now.ToShortDateString() + ".log", true);
-                    sw.WriteLine(_log);
+                    StreamWriter sw = new StreamWriter("CallControlDump_" + DateTime.Now.ToShortDateString() + ".log", true, Encoding.Default);
+                    sw.WriteLine(_log + "[" + DateTime.Now.ToLongTimeString()  + "]");
                     sw.Flush();
                     sw.Close();
                 }
                 catch (Exception e)
                 {
-                     logWrite("logFileWriter() 에러 : " + e.ToString());
+                    logFileWrite("logFileWriter() 에러 : " + e.ToString());
                 }
             }
             catch (Exception exception)
             {
-                logWrite(exception.ToString());
+                logFileWrite(exception.ToString());
             }
         }
     }
