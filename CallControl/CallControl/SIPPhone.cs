@@ -27,7 +27,16 @@ namespace CallControl
         delegate void RingingDele(string cname, string ani);
         delegate void AbandonDele();
 
+        bool DEBUG = false;
+
         Hashtable socketTable = new Hashtable();
+
+        public string Connect(string Device_Name, bool debug)
+        {
+            DEBUG = debug;
+            return Connect(Device_Name);
+
+        }
 
         public string Connect(string Device_Name)
         {
@@ -109,14 +118,11 @@ namespace CallControl
             string data = Encoding.ASCII.GetString(udpPacket.PayloadData);
             SIPM = makeSIPConstructor(data);
 
-            //log(data);
-
             if (SIPM.method.Equals("INVITE"))
             {
                 if (SIPM.sName.Equals("session")) //Ringing
                 {
                     OnEvent("Ringing", SIPM.from + "|" + SIPM.to + "|" + SIPM.callid);
-                    
                 }
                 else if (SIPM.sName.Equals("SIP Call")) //Dial
                 {
@@ -163,7 +169,8 @@ namespace CallControl
                 string to = "Unknown";
                 string agent = "Unknown";
                 string sName = "Unknown";
-
+                if (this.DEBUG)
+                sw.WriteLine("SIP_PACKET_DATA:"+data);
 
                 StringReader sr = new StringReader(data);
 
