@@ -82,6 +82,32 @@ namespace CallControl
         }
 
         /**
+         * 교환기 접속 시도
+         * 성공 : Success, 실패 : Fail
+         */
+        public void Connect(string arg, bool debug)
+        {
+            string result = "";
+            if (keys.Equals("LG"))
+            {
+                result = commType_LG.Connect(arg);
+            }
+            if (keys.Equals("SS"))
+            {
+                result = commType_SS.Connect(arg);
+            }
+            if (keys.Equals("SIP"))
+            {
+                result = commType_SIP.Connect(arg, debug);
+            }
+            if (keys.Equals("CI1") || keys.Equals("CI2"))
+            {
+                result = commType_CID.Connect(arg);
+            }
+            OnEvent("Connect", result);
+        }
+
+        /**
          * 교환기 접속 해제
          * 성공 : Success, 실패 : Fail
          */

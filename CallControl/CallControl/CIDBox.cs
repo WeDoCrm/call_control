@@ -15,6 +15,8 @@ namespace CallControl
 
         private SerialPort comport = new SerialPort();
         private bool hasHookOffMsg = false;
+        private bool DEBUG = false;
+
         public CIDBox(string key)
         {
             logFileWrite("CIDBox key=" + key);
@@ -28,6 +30,11 @@ namespace CallControl
                 hasHookOffMsg = false;
             }
 
+        }
+        public string Connect(string COM_Name, bool debug)
+        {
+            DEBUG = debug;
+            return Connect(COM_Name);
         }
 
         public string Connect(string COM_Name)
@@ -174,7 +181,7 @@ namespace CallControl
         protected void Process_code(string data)
         {
             string rtnval = "";
-
+            //if (DEBUG)
             logFileWrite(":"+data+":");
             if (data.Length >= 3)
             {
@@ -232,7 +239,7 @@ namespace CallControl
         public void MakeOpcode(string sPort, string sCode, string sValue)
         {
             string trBuffer = "";
-            string trTemp = "";
+            //string trTemp = "";
 
             trBuffer = "" + sPort + sCode + sValue;
             for (int i = 1; i < 25 - trBuffer.Length; i++)
@@ -259,13 +266,6 @@ namespace CallControl
         {
             try
             {
-                //di = new DirectoryInfo(Application.StartupPath + "\\log\\" + DateTime.Now.ToShortDateString() + ".log");
-
-                //if (!di.Exists)
-                //{
-                //    svr_FileCheck();
-                //}
-
                 try
                 {
                     StreamWriter sw = new StreamWriter("CallControlDump_" + DateTime.Now.ToShortDateString() + ".log", true, Encoding.Default);

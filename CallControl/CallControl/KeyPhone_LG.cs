@@ -13,6 +13,14 @@ namespace CallControl
 
         private SerialPort comport = new SerialPort();
 
+        private bool DEBUG = false;
+
+        public string Connect(string COM_Name, bool debug)
+        {
+            DEBUG = debug;
+            return Connect(COM_Name);
+        }
+
         public string Connect(string COM_Name)
         {
             string result = "";

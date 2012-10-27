@@ -15,8 +15,10 @@ namespace CallControl
         string ToDN = "Unknown";
         string User_Agent = "Unknown";
         string Session_Name = "Unknown";
+        string Url = "Unknown";
 
-        public void setSIPMessage(string code, string method, string callid, string cseq, string from, string to, string agent, string sName)
+        public void setSIPMessage(string code, string method, string callid, 
+            string cseq, string from, string to, string agent, string sName, string url)
         {
             Status_Code = code;
             Method_Name = method;
@@ -26,6 +28,7 @@ namespace CallControl
             ToDN = to;
             User_Agent = agent;
             Session_Name = sName;
+            Url = url;
         }
 
         public string code
@@ -66,6 +69,23 @@ namespace CallControl
         public string sName
         {
             get { return Session_Name; }
+        }
+
+        public string url
+        {
+            get { return Url; }
+        }
+        public string toString()
+        {
+            return "Status_Code[" + Status_Code + "]"
+                + "Method[" + Method_Name + "]"
+                + "Callid[" + Call_ID + "]"
+                + "Cseq[" + Cseq + "]"
+                + "From[" + FromDN + "]"
+                + "To[" + ToDN + "]"
+                + "UA[" + User_Agent + "]"
+                + "SName[" + Session_Name + "]"
+                + "Url[" + Url + "]";
         }
     }
 }
