@@ -30,7 +30,7 @@ namespace CallControl
         bool DEBUG = false;
 
         enum PhoneType { None, LG00, KTCallBox };//LG10, LG50
-        PhoneType CurPhoneType = PhoneType.None;
+        PhoneType CurPhoneType = PhoneType.LG00;//PhoneType.None;  엘지로 고정2013/03/06
 
         const string LG_URL = "lgdacom.net";
         const string KT_URL = "kt070.co.kr";
@@ -126,16 +126,18 @@ namespace CallControl
             
             SIPM = makeSIPConstructor(data);
 
-            if (CurPhoneType == PhoneType.None) return;
+            ParseLG10();  //엘지로 고정 2013/03/06
 
-            if (CurPhoneType == PhoneType.LG00)
-            {
-                ParseLG10();
-            }
-            else
-            {
-                ParseKTCallBox();
-            }
+            //if (CurPhoneType == PhoneType.None) return;
+
+            //if (CurPhoneType == PhoneType.LG00)
+            //{
+            //    ParseLG10();
+            //}
+            //else
+            //{
+            //    ParseKTCallBox();
+            //}
 
 
         }
