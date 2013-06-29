@@ -16,12 +16,14 @@ namespace CallControl
         private SerialPort comport = new SerialPort();
         private bool hasHookOffMsg = false;
         private bool DEBUG = false;
+        private String key;
 
         public CIDBox(string key)
         {
+            this.key = key;
             logFileWrite("CIDBox key=" + key);
 
-            if (key.Equals("CI1"))
+            if (key.Equals(ConstDef.NIC_CID_PORT1))
             {
                 hasHookOffMsg = true;
             }
@@ -37,13 +39,19 @@ namespace CallControl
             return Connect(COM_Name);
         }
 
+
         public string Connect(string COM_Name)
         {
             logFileWrite("Connect hasHookOffMsg=" + hasHookOffMsg + " COM_Name=" + COM_Name);
 
 
             string result = "";
-            comport.DataReceived += new SerialDataReceivedEventHandler(port_DataReceived);
+
+            if (key.Equals(ConstDef.NIC_CID_PORT1) || key.Equals(ConstDef.NIC_CID_PORT2)) {
+                comport.DataReceived += new SerialDataReceivedEventHandler(port_DataReceived);
+            } else if (key.Equals(ConstDef.NIC_CID_PORT4)) {
+                comport.DataReceived += new SerialDataReceivedEventHandler(CTI420_DataReceived);
+            }
             bool error = false;
 
             // If the port is open, close it.
@@ -128,7 +136,9 @@ namespace CallControl
                 buff = (byte)comport.ReadByte();
                 //logFileWrite("read=" + read);
                 //logFileWrite("buff=" + buff);
-                if (buff == BYTE_CID_START) isMsgStarted = true;
+                if (buff == BYTE_CID_START) {
+                    isMsgStarted = true;
+                }
 
                 if (buff == BYTE_CID_START
                     || (buff == BYTE_CID_END && read == (byteLen - 1))
@@ -178,6 +188,81 @@ namespace CallControl
             }
         }
 
+        const byte BYTE_CTI420_START = 0x53;  //"S"
+        const byte BYTE_CTI420_END = 0x45;    //"E"
+        //SI10629160707077913001E
+        //SI10629160701042047792E
+        private void CTI420_DataReceived(object sender, SerialDataReceivedEventArgs e) {
+            // If the com port has been closed, do nothing
+            if (!comport.IsOpen)
+                return;
+
+            // This method will be called when there is data waiting in the port's buffer
+
+            // Read all the data waiting in the buffer
+            //string data = comport.ReadExisting();
+            int byteLen = comport.BytesToRead;
+            int read = 0;
+            int offset = 0;
+            byte buff = 0x00;
+
+            //logFileWrite("byteLen=" + byteLen);
+            while (true) {
+                buff = (byte)comport.ReadByte();
+
+                if (buff == BYTE_CTI420_START) {
+                    isMsgStarted = true;
+                }
+                
+                if (buff == BYTE_CTI420_END && isMsgStarted)  //means got all message needed. not between 'z' ~ '0'
+                {
+                    isFullMsg = true;
+                }
+
+                if (buff == BYTE_CTI420_START
+                    || buff == BYTE_CTI420_END
+                    || (buff <= 0x7A && buff >= 0x30)) {
+
+                    mBuffer[offset] = buff;
+                    offset++;
+                    buff = 0x00;
+                } 
+                
+                if (isFullMsg) {
+                    break;
+                }
+                
+                read++;
+                
+                if (read >= byteLen && !isMsgStarted) {
+                        isFullMsg = true;
+                        break;
+                }
+            }
+
+            //if (offset == 1 && mBuffer[0] == BYTE_CID_END)
+            //{
+            //    mData = DUMMY_CID_HOOKOFF;
+            //}
+            //else
+            //{
+            //    mData += System.Text.Encoding.Default.GetString(mBuffer, 0, offset);
+            //}
+            mData += System.Text.Encoding.Default.GetString(mBuffer, 0, offset);
+            //memset
+            for (int i = 0; i < mBuffer.Length; i++)
+                mBuffer[i] = 0x00;
+
+            if (isFullMsg) {
+                // Display the text to the user in the terminal
+                //MessageBox.Show(data);
+                Process_code(mData);
+                isFullMsg = false;
+                isMsgStarted = false;
+                mData = "";
+            }
+        }
+
         protected void Process_code(string data)
         {
             string rtnval = "";
@@ -185,6 +270,7 @@ namespace CallControl
             logFileWrite(":"+data+":");
             if (data.Length >= 3)
             {
+
                 string Opcode = data.Substring(2, 1);
                 switch (Opcode)
                 {
@@ -233,9 +319,24 @@ namespace CallControl
                     case "E":
                         OnEvent("OnHook", "");
                         break;
+                    default : 
+                            //SI10629160707077913001E
+                            //SI10629160701042047792E
+                            if (data.Substring(0, 2).Equals(ConstDef.CID4_START_MSG))    //"SI"
+                            {
+                                rtnval = data.Replace(" ", "");
+                                rtnval = rtnval.Substring(11, rtnval.Length - 12);
+                                logFileWrite("Ringing::" + rtnval + "\n");
+                                OnEvent("Ringing", rtnval);
+                                Thread.Sleep(1000);
+                                logFileWrite("Auto OffHook ==> 4 port \n");
+                                OnEvent("OffHook", "");
+                            }
+                            break;
                 }
             }
         }
+
         public void MakeOpcode(string sPort, string sCode, string sValue)
         {
             string trBuffer = "";

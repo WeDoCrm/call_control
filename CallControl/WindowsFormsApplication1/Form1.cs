@@ -37,7 +37,9 @@ namespace WindowsFormsApplication1
             comboBox1.Items.Add(new ItemKeyValue("LG", "LG"));
             comboBox1.Items.Add(new ItemKeyValue("SS", "삼성"));
             comboBox1.Items.Add(new ItemKeyValue("SIP", "SIP"));
-            comboBox1.Items.Add(new ItemKeyValue("CID", "CID BOX"));
+            comboBox1.Items.Add(new ItemKeyValue("CI1", "CID 1P"));
+            comboBox1.Items.Add(new ItemKeyValue("CI2", "CID 2P"));
+            comboBox1.Items.Add(new ItemKeyValue("CI4", "CID 4P"));
 
             commctl.OnEvent += new CommCtl.CommCtl_MessageDelegate(RecvMessage);
         }
@@ -59,25 +61,31 @@ namespace WindowsFormsApplication1
                 string device_port = "";
                 if (!sel1.Equals(null))
                 {
-                    if (sel1.Equals("CID"))
+                    if (sel1.Equals("CI1"))
                     {
                         button2.Enabled = true;
                         device_port = "COM3";
-                    }
-                    else if(sel1.Equals("SIP"))
+                    } else if (sel1.Equals("CI2")) {
+                        button2.Enabled = true;
+                        device_port = "COM3";
+                    } else if (sel1.Equals("CI4")) {
+                        button2.Enabled = true;
+                        device_port = "COM3";
+                    } else if (sel1.Equals("SIP"))
                     {
                         button2.Enabled = false;
-                        device_port = "Network adapter 'Intel(R) PRO/1000 PL Network Connection' on local host";
+                        device_port = "SIP";
+                        //"Network adapter 'Intel(R) PRO/1000 PL Network Connection' on local host";
                     }
                     else if (sel1.Equals("LG"))
                     {
                         button2.Enabled = false;
-                        device_port = "COM1";
+                        device_port = "LG";
                     }
                     else if (sel1.Equals("SS"))
                     {
                         button2.Enabled = false;
-                        device_port = "COM1";
+                        device_port = "SS";
                     }
                     commctl.Select_Type(sel1);
                     //commctl.Connect("Network adapter 'Intel(R) PRO/1000 PL Network Connection' on local host");
