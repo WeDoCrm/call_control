@@ -88,4 +88,18 @@ namespace CallControl
                 + "Url[" + Url + "]";
         }
     }
+
+    public class ConstDef {
+        public const string NIC_SIP = "SIP";
+        public const string NIC_LG_KP = "LG";
+        public const string NIC_CID_PORT1 = "CI1";
+        public const string NIC_CID_PORT2 = "CI2";
+        public const string NIC_CID_PORT4 = "CI4";
+        public const string NIC_SS_KP = "SS";
+
+        public const string CID4_START_MSG = "SI";
+
+        public const bool DEBUG = false;
+    }
+
 }

@@ -31,22 +31,25 @@ namespace CallControl
         public void Select_Type(string selkeys)
         {
             keys = selkeys;
-            if (keys.Equals("LG"))
+            if (keys.Equals(ConstDef.NIC_LG_KP ))
             {
                 commType_LG = new KeyPhone_LG();
                 commType_LG.OnEvent += new KeyPhone_LG.KeyPhone_LG_MessageDelegate(RecvMessage);
             }
-            if (keys.Equals("SS"))
+            if (keys.Equals(ConstDef.NIC_SS_KP ))
             {
                 commType_SS = new KeyPhone_SS();
                 commType_SS.OnEvent += new KeyPhone_SS.KeyPhone_SS_MessageDelegate(RecvMessage);
             }
-            if (keys.Equals("SIP"))
+            if (keys.Equals(ConstDef.NIC_SIP))
             {
                 commType_SIP = new SIPPhone();
                 commType_SIP.OnEvent += new SIPPhone.SIPPhone_MessageDelegate(RecvMessage);
             }
-            if (keys.Equals("CI1") || keys.Equals("CI2"))
+            if (keys.Equals(ConstDef.NIC_CID_PORT1) 
+                || keys.Equals(ConstDef.NIC_CID_PORT2) 
+                || keys.Equals(ConstDef.NIC_CID_PORT4)
+                )
             {
                 commType_CID = new CIDBox(keys);
                 commType_CID.OnEvent += new CIDBox.CIDBox_MessageDelegate(RecvMessage);
@@ -62,19 +65,22 @@ namespace CallControl
         public void Connect(string arg)
         {
             string result = "";
-            if (keys.Equals("LG"))
+            if (keys.Equals(ConstDef.NIC_LG_KP))
             {
                 result = commType_LG.Connect(arg);
             }
-            if (keys.Equals("SS"))
+            if (keys.Equals(ConstDef.NIC_SS_KP))
             {
                 result = commType_SS.Connect(arg);
             }
-            if (keys.Equals("SIP"))
+            if (keys.Equals(ConstDef.NIC_SIP))
             {
                 result = commType_SIP.Connect(arg);
             }
-            if (keys.Equals("CI1")||keys.Equals("CI2"))
+            if (keys.Equals(ConstDef.NIC_CID_PORT1)
+                || keys.Equals(ConstDef.NIC_CID_PORT2)
+                || keys.Equals(ConstDef.NIC_CID_PORT4)
+                ) 
             {
                 result = commType_CID.Connect(arg);
             }
@@ -88,20 +94,19 @@ namespace CallControl
         public void Connect(string arg, bool debug)
         {
             string result = "";
-            if (keys.Equals("LG"))
-            {
+            if (keys.Equals(ConstDef.NIC_LG_KP)) {
                 result = commType_LG.Connect(arg);
             }
-            if (keys.Equals("SS"))
-            {
+            if (keys.Equals(ConstDef.NIC_SS_KP)) {
                 result = commType_SS.Connect(arg);
             }
-            if (keys.Equals("SIP"))
-            {
+            if (keys.Equals(ConstDef.NIC_SIP)) {
                 result = commType_SIP.Connect(arg, debug);
             }
-            if (keys.Equals("CI1") || keys.Equals("CI2"))
-            {
+            if (keys.Equals(ConstDef.NIC_CID_PORT1)
+                || keys.Equals(ConstDef.NIC_CID_PORT2)
+                || keys.Equals(ConstDef.NIC_CID_PORT4)
+                ) {
                 result = commType_CID.Connect(arg);
             }
             OnEvent("Connect", result);
@@ -114,20 +119,19 @@ namespace CallControl
         public void disConnect()
         {
             string result = "";
-            if (keys.Equals("LG"))
-            {
+            if (keys.Equals(ConstDef.NIC_LG_KP)) {
                 result = commType_LG.disConnect();
             }
-            if (keys.Equals("SS"))
-            {
+            if (keys.Equals(ConstDef.NIC_SS_KP)) {
                 result = commType_SS.disConnect();
             }
-            if (keys.Equals("SIP"))
-            {
+            if (keys.Equals(ConstDef.NIC_SIP)) {
                 result = commType_SIP.disConnect();
             }
-            if (keys.Equals("CI1") || keys.Equals("CI2"))
-            {
+            if (keys.Equals(ConstDef.NIC_CID_PORT1)
+                || keys.Equals(ConstDef.NIC_CID_PORT2)
+                || keys.Equals(ConstDef.NIC_CID_PORT4)
+                ) {
                 result = commType_CID.disConnect();
             }
             OnEvent("disConnect", result);
@@ -147,8 +151,10 @@ namespace CallControl
          */
         public void Dial(string sBuf)
         {
-            if (keys.Equals("CI1") || keys.Equals("CI2"))
-            {
+            if (keys.Equals(ConstDef.NIC_CID_PORT1)
+                || keys.Equals(ConstDef.NIC_CID_PORT2)
+                || keys.Equals(ConstDef.NIC_CID_PORT4)
+                ) {
                 commType_CID.MakeOpcode("1", "O", sBuf);
             }
         }
